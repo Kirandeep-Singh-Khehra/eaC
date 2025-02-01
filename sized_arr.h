@@ -7,6 +7,7 @@
 // DECLARATION //
 void * sized_arr_init(size_t size, int count);
 unsigned int sized_arr_len(void *arr);
+void sized_arr_free(void *arr);
 
 // IMPLEMENTATION //
 void * sized_arr_init(size_t size, int count) {
