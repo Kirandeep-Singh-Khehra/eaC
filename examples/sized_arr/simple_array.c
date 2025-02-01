@@ -24,6 +24,8 @@ int main() {
   for (int i = 0; i < LENGTH; i++) {
     printf("%d, { .a = %d, .b = %f, .c = \"%s\"}\n", i, d_arr[i].a, d_arr[i].b, d_arr[i].c);
   }
+
+  sized_arr_free(d_arr);
   
   return 0;
 }

@@ -7,6 +7,7 @@
 // DECLARATION //
 void * sized_arr_init(size_t size, int count);
 unsigned int sized_arr_len(void *arr);
+void* sized_arr_mem_addr(void *arr);
 void sized_arr_free(void *arr);
 
 // IMPLEMENTATION //
@@ -23,8 +24,12 @@ unsigned int sized_arr_len(void *arr) {
     return ((unsigned int *)arr)[-1];
 }
 
+void* sized_arr_mem_addr(void *arr) {
+    return ((unsigned int *)arr) - 1;
+}
+
 void sized_arr_free(void *arr) {
-    free(((unsigned int *)arr) - 1);
+    free(sized_arr_mem_addr(arr));
 }
 
 #endif
