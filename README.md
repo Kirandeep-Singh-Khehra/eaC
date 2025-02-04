@@ -3,7 +3,8 @@ Utilities to make programming in C little better.
 
 1. Dynamic arrays with sizes.[[Implementation](sized_arr.h)][[Examples](/examples/sized_arr)]
 
-    Create dynamic arrays and access it's size whenever required. 
+    Create dynamic arrays and access it's size whenever required.
+    > Size of array is stored as `unsigned int` stored at address directly before array pointer.
     ```c
     // Create a dynamic array
     struct data *d_arr = sized_arr_init(sizeof(struct data), LENGTH);
@@ -17,6 +18,9 @@ Utilities to make programming in C little better.
     ```
 
 2. Struct with hidden/private/opaque members.[[Implementation](opaque_struct_members.h)][[Examples](/examples/opaque_struct_members)]
+
+    Create structs with opaque properties/members which are visible ony in required c file.
+    > For better usage object files are required to be created as explained in given explanation.
 
     Create a header file with definition.
     ```c
@@ -73,6 +77,26 @@ Utilities to make programming in C little better.
     }
     ```
 
+3. Pointer with hidden properties.[[Implementation](prop_ptr.h)][[Examples](/examples/prop_ptr)]
 
+    Create pointer to any data structure with hidden property. Property to a pointer can be of any type.
+    > Property is stored behind pointer in memory.<br>
+    > For reference:<br>
+    > `malloc` returns `[memory_block]` but `prop_ptr_init()` creates a memory block to store property, property size and required block and returns address of memory block. <br>
+    > Storage structure is somewhat like this `[property][size_t(size of property)][memory_block]`
+    ```c
+    // Create a pointer with hidden property(here `struct p_t` is used as property).
+    struct m_t *m_ptr =
+      (struct m_t *)prop_ptr_init(sizeof(struct p_t), sizeof(struct m_t));
+
+    // Set property
+    prop_ptr_set_prop(m_ptr, &(struct p_t){10, 2.5, "asd"}, sizeof(struct p_t));
+
+    // Get pointer to property
+    struct p_t *p_ptr = (struct p_t *)prop_ptr_get_prop(m_ptr);
+
+    // Finally free the property
+    prop_ptr_free(m_ptr);
+    ```
 **More utils on the way ...**
 
