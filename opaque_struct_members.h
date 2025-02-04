@@ -1,0 +1,6 @@
+#ifdef USE_PRIVATE_SCOPE
+  #define PRIVATE(STRUCT_PRIVATE_MEMBERS) unsigned char: 0; STRUCT_PRIVATE_MEMBERS;
+#else
+  #define PRIVATE(STRUCT_PRIVATE_MEMBERS) char _[sizeof(struct { STRUCT_PRIVATE_MEMBERS })];
+#endif
+
