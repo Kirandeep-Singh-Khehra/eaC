@@ -1,6 +1,18 @@
 # eaC
 Utilities to make programming in C little better.
 
+### Install
+To  install these header files simply clone this repo and run make.
+```bash
+git clone https://github.com/Kirandeep-Singh-Khehra/eaC.git
+cd eaC
+make install
+# or
+# cp *.h /usr/local/include # Or your path
+```
+or copy the header files to your project or place it anywhere you need. To get the respective header file see the list of utils below and click `Implementation` link ahead of their names.
+
+### List of utilities
 1. Dynamic arrays with sizes.[[Implementation](sized_arr.h)][[Examples](/examples/sized_arr)]
 
     Create dynamic arrays and access it's size whenever required.
@@ -8,10 +20,10 @@ Utilities to make programming in C little better.
     ```c
     // Create a dynamic array
     struct data *d_arr = sized_arr_init(sizeof(struct data), LENGTH);
-  
+    
     // Get the length of array
     int len = sized_arr_len(d_arr);
-  
+    
     // Access elements as usual
     d_arr[INDEX].prop = 10;
     printf("%x", d_arr[INDEX].prop);
