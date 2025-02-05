@@ -1,0 +1,34 @@
+# Common makefile to build examples
+#  by building .o files of all .c files and compiling them together
+
+.PHONY: all run clean
+
+CC = gcc
+CFLAGS = -Wall -g
+LDFLAGS =
+
+PROJ_NAME = $(shell basename "$$(pwd)")
+
+BUILDDIR = build
+TARGET = $(BUILDDIR)/$(PROJ_NAME)
+SOURCES = $(wildcard *.c)
+OBJECTS = $(SOURCES:%.c=$(BUILDDIR)/%.o)
+
+all: $(TARGET) build run
+
+build: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+$(BUILDDIR)/%.o: %.c
+	mkdir -p $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+run: 
+	$(BUILDDIR)/$(PROJ_NAME)
+
+clean:
+	rm -rf $(BUILDDIR)
+	rm -f $(TARGET)
+
