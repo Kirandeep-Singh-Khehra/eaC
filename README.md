@@ -94,7 +94,7 @@ or copy the header files to your project or place it anywhere you need. To get t
     }
     ```
 
-    ***Using non-bit-field method***<br>
+    ***Using bit-field method***<br>
     Create a header file with definition.
     ```c
     // File: m_t.h
