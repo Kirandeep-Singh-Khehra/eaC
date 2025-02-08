@@ -13,7 +13,7 @@ make install
 or copy the header files to your project or place it anywhere you need. To get the respective header file see the list of utils below and click `Implementation` link ahead of their names.
 
 ### List of utilities
-1. Dynamic arrays with sizes.[[Implementation](sized_arr.h)][[Examples](/examples/sized_arr)]
+1. **Dynamic arrays with sizes.**[[Implementation](sized_arr.h)][[Examples](/examples/sized_arr)]
 
     Create dynamic arrays and access it's size whenever required.
     > Size of array is stored as `unsigned int` stored at address directly before array pointer.
@@ -29,11 +29,15 @@ or copy the header files to your project or place it anywhere you need. To get t
     printf("%x", d_arr[INDEX].prop);
     ```
 
-2. Struct with hidden/private/opaque members.[[Implementation](opaque_struct_members.h)][[Examples](/examples/opaque_struct_members)]
+2. **Struct with hidden/private/opaque members.**[[Implementation](opaque_struct_members.h)][[Examples](/examples/opaque_struct_members)]
 
-    Create structs with opaque properties/members which are visible ony in required c file.
+    Create structs with opaque properties/members which are visible ony in required c file. There are two methods of implementation:
+     - ***bit-field method:*** It will place unnamed bit-field in place of primitive data-types. And it does not work for any datatype whose size gets more than `sizeof(long)`.
+     - ***non-bit-field method:*** It will take complete list of members and place a char array named `_` to accomodate size of members. These member list must be declared in the end of struct.
     > For better usage object files are required to be created as explained in given explanation.
 
+
+    ***Using non-bit-field method***<br>
     Create a header file with definition.
     ```c
     // File: m_t.h
@@ -44,6 +48,7 @@ or copy the header files to your project or place it anywhere you need. To get t
       // Define private members.
       PRIVATE(
         int b;
+        int c;
       )
     };
 
@@ -89,7 +94,64 @@ or copy the header files to your project or place it anywhere you need. To get t
     }
     ```
 
-3. Pointer with hidden properties.[[Implementation](prop_ptr.h)][[Examples](/examples/prop_ptr)]
+    ***Using non-bit-field method***<br>
+    Create a header file with definition.
+    ```c
+    // File: m_t.h
+    #define USE_BIT_MASK_METHOD
+    #include "opaque_struct_members.h"
+
+    struct m_t {
+      int a;
+      // Define private members.
+      PRIVATE(int, b)
+      private(int, c)
+    };
+
+    struct m_t new_m_t();
+    int m_t_get_b(struct m_t);
+    void m_t_set_b(struct m_t*, int);
+
+    // Necessary to undefine PRIVATE macro.
+    #ifdef PRIVATE
+    #undef PRIVATE
+    #endif
+    #undef USE_BIT_MASK_METHOD
+    ```
+
+    Write implementation of struct.
+    ```c
+    // File: m_t.c
+    #define USE_PRIVATE_SCOPE // Define to make private members visible in this scope.
+    #include "struct_def.h"
+
+    struct m_t new_m_t() { return (struct m_t) {.a = 10, .b = 20}; }
+
+    int m_t_get_b(struct m_t m) { return m.b; }
+    void m_t_set_b(struct m_t* m, int b) { m->b = b; }
+    ```
+    Compile this file to get object file.
+    ```bash
+    gcc -c m_t.c -o m_t.o
+    ```
+    Now use the header file in your code and play with it.
+    ```c
+    // File: main.c
+    #include "m_t.h"
+
+    int main () {
+      // Declare a struct
+      struct m_t m = new_m_t(); // or use `{.a = 10}`
+
+      /* Use getter and setter for private/opaque members 
+         but direct access will return error. */
+      m_t_set_b(&m, 50);
+      printf("%d\n", m_t_get_b(m));
+      // printf("%d\n", m.b); // Will give error
+    }
+    ```
+
+4. **Pointer with hidden properties.**[[Implementation](prop_ptr.h)][[Examples](/examples/prop_ptr)]
 
     Create pointer to any data structure with hidden property. Property to a pointer can be of any type.
     > Property is stored behind pointer in memory.<br>
@@ -111,4 +173,5 @@ or copy the header files to your project or place it anywhere you need. To get t
     prop_ptr_free(m_ptr);
     ```
 **More utils on the way ...**
+
 
