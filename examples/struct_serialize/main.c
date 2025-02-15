@@ -1,6 +1,10 @@
 #include <stdio.h>
 
 // DEFINE STRUCT //
+#define STRUCT_PRINT // To create print functions
+#define STRUCT_GET_PROPS // To create functions to list props
+#define STRUCT_GET_PROPS_CONST // To create const prop
+
 #define STRUCT_DEF STRUCT(m_t, \
   VAR(int, a) \
   VAR(char, b) \
@@ -8,9 +12,6 @@
   VAR(double, d) \
 )
 // Or define STRUCT_DEF_FILE "file_name"
-
-#define STRUCT_TO_STRING // To create print functions
-#define STRUCT_GET_PROPS // To create print functions
 #include "../../struct_serialize.h"
 
 // DEFINE STRUCT //
@@ -18,9 +19,6 @@
   VAR(int, a) \
   VAR(m_t, b) \
 )
-// Or define STRUCT_DEF_FILE "file_name"
-
-#define STRUCT_TO_STRING // To create print functions
 #include "../../struct_serialize.h"
 
 struct m_t m = {
@@ -36,15 +34,15 @@ struct m2_t m2 = {
 
 int main() {
   m2.b = m;
-  m_t_print(m);
+  m_t_print(1, m);
   printf("\n");
-  m2_t_print(m2);
+  m2_t_print(1, m2);
 
   printf("\n-----\n");
-  struct_props_t props = m2_t_get_props();
-  printf("n_props: %d\n", props.n_props);
-  for (int i = 0; i < props.n_props; i++) {
-    printf(" - %s: %s\n", props.props[i].name, props.props[i].type);
+  long m2_t_prop_count = sizeof(m_t_props)/sizeof(var_props_t);
+  printf("n_props: %ld\n", m2_t_prop_count);
+  for (int i = 0; i < sizeof(m_t_props)/sizeof(var_props_t); i++) {
+    printf(" - %s: %s\n", m_t_props[i].name, m_t_props[i].type);
   }
   printf("\n");
 }

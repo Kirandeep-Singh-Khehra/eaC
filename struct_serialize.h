@@ -46,8 +46,8 @@ typedef double* double_ptr;
   // string: "%s",
 
 #define GEN_PRINT_FUN(dtype) \
-void dtype##_print(dtype a) { \
-  printf(GET_PATTERN_FROM_TYPE(a), a); \
+void dtype##_print(int fd, dtype a) { \
+  dprintf(fd, GET_PATTERN_FROM_TYPE(a), a); \
 }
 
 GEN_PRINT_FUN(char);
@@ -80,18 +80,18 @@ typedef struct struct_name { \
 #undef VAR
 
 /*************************************** PRINT ***********/
-#ifdef STRUCT_TO_STRING
+#ifdef STRUCT_PRINT
 
 #define VAR(type, var_name) \
-printf(" .%s: ", #var_name); \
-type##_print(s.var_name); \
-printf(" ");
+dprintf(fd, " .%s: ", #var_name); \
+type##_print(fd, s.var_name); \
+dprintf(fd, " ");
 
 #define STRUCT(struct_name, data) \
-void struct_name##_print(struct struct_name s) { \
-  printf("(%s){", #struct_name); \
+void struct_name##_print(int fd, struct struct_name s) { \
+  dprintf(fd, "(%s){", #struct_name); \
   data \
-  printf("}"); \
+  dprintf(fd, "}"); \
 };
 /*********************************************************/
 
@@ -109,22 +109,14 @@ void struct_name##_print(struct struct_name s) { \
 #endif // STRUCT_TO_STRING
 
 /*************************************** PROPS ***********/
-#ifdef STRUCT_GET_PROPS
+#ifdef STRUCT_GET_PROPS_CONST
 
 #define VAR(type, var_name) \
 { #var_name, #type},
 
 #define STRUCT(struct_name, data) \
-struct_props_t struct_name##_get_props() { \
-    var_props_t var_props[] = { \
+var_props_t struct_name##_props[] = { \
       data \
-    }; \
-    struct_props_t props = (struct_props_t) { \
-        .n_props = sizeof(var_props)/sizeof(struct var_props_t), \
-    }; \
-    props.props = (var_props_t*)malloc(props.n_props * sizeof(var_props_t)); \
-    memcpy(props.props, var_props, props.n_props * sizeof(var_props_t));\
-    return props; \
 };
 /*********************************************************/
 
@@ -139,6 +131,8 @@ struct_props_t struct_name##_get_props() { \
 #undef STRUCT
 #undef VAR
 
+#endif // STRUCT_GET_PROPS
+
 #ifdef STRUCT_DEF
 #undef STRUCT_DEF
 #endif
@@ -147,5 +141,4 @@ struct_props_t struct_name##_get_props() { \
 #undef STRUCT_DEF_FILE
 #endif
 
-#endif // STRUCT_GET_PROPS
 
