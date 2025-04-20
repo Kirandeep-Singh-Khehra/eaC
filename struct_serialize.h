@@ -19,7 +19,7 @@ Stuff to add
 #ifndef _STRUCT_UTLS_
 #define _STRUCT_UTLS_
 
-typedef char string[32];
+typedef char *string;
 typedef struct var_props_t {
   string name; // 0: name, 1: type
   string type; // 0: name, 1: type
@@ -57,6 +57,12 @@ GEN_PRINT_FUN(float);
 GEN_PRINT_FUN(double);
 
 #endif //!_STRUCT_UTLS_
+
+
+#ifdef CLEAR_STRUCT_MACROS
+
+#undef CLEAR_STRUCT_MACROS
+#endif
 
 /*************************************** DECLARE *********/
 #define VAR(type, var_name) \
