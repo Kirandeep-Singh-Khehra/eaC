@@ -151,7 +151,7 @@ or copy the header files to your project or place it anywhere you need. To get t
     }
     ```
 
-4. **Pointer with hidden properties.**[[Implementation](prop_ptr.h)][[Examples](/examples/prop_ptr)]
+3. **Pointer with hidden properties.**[[Implementation](prop_ptr.h)][[Examples](/examples/prop_ptr)]
 
     Create pointer to any data structure with hidden property. Property to a pointer can be of any type.
     > Property is stored behind pointer in memory.<br>
@@ -172,6 +172,29 @@ or copy the header files to your project or place it anywhere you need. To get t
     // Finally free the property
     prop_ptr_free(m_ptr);
     ```
-**More utils on the way ...**
+4. **Dynamic sized string**[[Implementation](dstring.h)][[Examples](/examples/dstring)]
 
+    Provides a dynamic string implementation in C, where strings automatically resize as needed.  This library is built upon the `sized_arr.h` dynamic array functionality.
+    ```c
+    #include "dstring.h"
+    #include <stdio.h>
+
+    int main() {
+        // Initialize a dynamic string
+        string my_string = string_init();
+
+        // Append to the string
+        my_string = string_append(my_string, "Hello, World!");
+
+        // Print the string
+        printf("String: %s\\n", string_c_str(my_string));
+
+        // Free the string's memory
+        string_free(my_string);
+
+        return 0;
+    }
+    ```
+
+**More utils on the way ...**
 
