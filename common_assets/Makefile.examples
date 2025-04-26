@@ -14,7 +14,7 @@ TARGET = $(BUILDDIR)/$(PROJ_NAME)
 SOURCES = $(wildcard *.c)
 OBJECTS = $(SOURCES:%.c=$(BUILDDIR)/%.o)
 
-all: $(TARGET) build run
+all: clean $(TARGET) build run
 
 build: $(TARGET)
 
